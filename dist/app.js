@@ -4,11 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const products_route_1 = require("./modules/products/products.route");
 const app = (0, express_1.default)();
-const port = 3000;
+// parsers
+app.use(express_1.default.json());
+app.use('/api/products', products_route_1.ProductsRoute);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-});
+exports.default = app;
