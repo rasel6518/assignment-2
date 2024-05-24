@@ -24,12 +24,41 @@ const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const updatedProductById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield products_model_1.Product.findByIdAndUpdate(id, payload);
+    try {
+        const result = yield products_model_1.Product.findByIdAndUpdate(id, payload, { new: true, runValidators: true });
+        return result;
+    }
+    catch (error) {
+        console.error('Error updating product by ID:', error);
+        throw new Error(`Could not update product with ID ${id}: ${error.message}`);
+    }
+});
+const deleteProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield products_model_1.Product.findByIdAndDelete(id);
+        return result;
+    }
+    catch (error) {
+        console.error('Error deleting product by ID:', error);
+        throw new Error(`Could not delete product with ID ${id}: ${error.message}`);
+    }
+});
+const searchProducts = (searchTerm) => __awaiter(void 0, void 0, void 0, function* () {
+    const regex = new RegExp(searchTerm, "i"); // case-insensitive regex
+    const result = yield products_model_1.Product.find({
+        $or: [
+            { name: regex },
+            { description: regex },
+            { tags: regex }
+        ]
+    });
     return result;
 });
 exports.productService = {
     createProduct,
     getAllProducts,
     getProductById,
-    updatedProductById
+    updatedProductById,
+    deleteProductById,
+    searchProducts
 };

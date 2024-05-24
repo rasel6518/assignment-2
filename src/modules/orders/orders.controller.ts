@@ -4,6 +4,8 @@ import { OrderService } from "./orders.service"
 import { OrderValidationSchema } from "./orders.validator"
 
 
+// Order create Controller
+
 const createOder = async (req: Request, res: Response) => {
 
     const productdata = req.body
@@ -20,6 +22,7 @@ const createOder = async (req: Request, res: Response) => {
 
 }
 
+// Order get all and email by order Controller
 
 const getOrders = async (req: Request, res: Response) => {
     const { email } = req.query;
