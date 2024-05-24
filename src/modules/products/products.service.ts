@@ -28,10 +28,21 @@ const deleteProductById = async (id: string) => {
     try {
         const result = await Product.findByIdAndDelete(id);
         return result;
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error deleting product by ID:', error);
         throw new Error(`Could not delete product with ID ${id}: ${error.message}`);
     }
+};
+const searchProducts = async (searchTerm: string) => {
+    const regex = new RegExp(searchTerm, "i"); // case-insensitive regex
+    const result = await Product.find({
+        $or: [
+            { name: regex },
+            { description: regex },
+            { tags: regex }
+        ]
+    });
+    return result;
 };
 
 
@@ -42,5 +53,6 @@ export const productService = {
     getAllProducts,
     getProductById,
     updatedProductById,
-    deleteProductById
+    deleteProductById,
+    searchProducts
 }

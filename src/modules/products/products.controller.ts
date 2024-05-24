@@ -27,27 +27,33 @@ const createProduct = async (req: Request, res: Response) => {
 // Product Get All controller
 
 const getAllProducts = async (req: Request, res: Response) => {
+    const { searchTerm } = req.query;
 
     try {
-        const result = await productService.getAllProducts();
-
-        res.status(200).json({
-            success: true,
-            message: "Products are fetched successfully !",
-            data: result,
-        });
+        let result;
+        if (searchTerm && typeof searchTerm === 'string') {
+            result = await productService.searchProducts(searchTerm);
+            res.status(200).json({
+                success: true,
+                message: `Products matching search term '${searchTerm}' fetched successfully!`,
+                data: result,
+            });
+        } else {
+            result = await productService.getAllProducts();
+            res.status(200).json({
+                success: true,
+                message: "Products are fetched successfully!",
+                data: result,
+            });
+        }
     } catch (err: any) {
         res.status(500).json({
             success: false,
-            message: "Could not fetch Products!",
-            error: err,
+            message: "Could not fetch products!",
+            error: err.message,
         });
-
-
-
     }
-}
-
+};
 // Product Get By Id controller
 const getProductById = async (req: Request, res: Response) => {
 
